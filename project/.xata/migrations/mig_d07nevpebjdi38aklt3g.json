@@ -1,0 +1,82 @@
+{
+  "done": true,
+  "migration": {
+    "name": "mig_d07nevpebjdi38aklt3g",
+    "operations": [
+      {
+        "create_table": {
+          "name": "quotes",
+          "columns": [
+            {
+              "name": "ID",
+              "type": "integer",
+              "comment": "",
+              "nullable": true
+            },
+            {
+              "name": "Anime",
+              "type": "text",
+              "comment": "{\"xata.type\":\"string\"}",
+              "nullable": true
+            },
+            {
+              "name": "Character",
+              "type": "text",
+              "comment": "{\"xata.type\":\"string\"}",
+              "nullable": true
+            },
+            {
+              "name": "Quote",
+              "type": "text",
+              "comment": "",
+              "nullable": true
+            },
+            {
+              "name": "xata_id",
+              "type": "text",
+              "check": {
+                "name": "quotes_xata_id_length_xata_id",
+                "constraint": "length(\"xata_id\") < 256"
+              },
+              "unique": true,
+              "default": "'rec_' || xata_private.xid()"
+            },
+            {
+              "name": "xata_version",
+              "type": "integer",
+              "default": "0"
+            },
+            {
+              "name": "xata_createdat",
+              "type": "timestamptz",
+              "default": "now()"
+            },
+            {
+              "name": "xata_updatedat",
+              "type": "timestamptz",
+              "default": "now()"
+            }
+          ],
+          "comment": ""
+        }
+      },
+      {
+        "sql": {
+          "up": "ALTER TABLE \"quotes\" REPLICA IDENTITY FULL",
+          "onComplete": true
+        }
+      },
+      {
+        "sql": {
+          "up": "CREATE TRIGGER xata_maintain_metadata_trigger_pgroll\n  BEFORE INSERT OR UPDATE\n  ON \"quotes\"\n  FOR EACH ROW\n  EXECUTE FUNCTION xata_private.maintain_metadata_trigger_pgroll()",
+          "onComplete": true
+        }
+      }
+    ]
+  },
+  "migrationType": "pgroll",
+  "name": "mig_d07nevpebjdi38aklt3g",
+  "parent": "mig_d07n690ng4kir7cbm380",
+  "schema": "public",
+  "startedAt": "2025-04-28T12:41:35.893067Z"
+}
